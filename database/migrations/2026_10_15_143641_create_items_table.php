@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('place_id')->constrained('places')
             ->cascadeOnDelete();
-            $table->string('name', 6);
+            $table->string('name', 60);
             $table->string('description')->nullable();
             $table->string('color');
             $table->date('found_on');
