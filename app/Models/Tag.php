@@ -2,17 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Item;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[Fillable(['name'])]
 class Tag extends Model
 {
-    protected $fillable = [
-        'name',
-    ];
+    use HasFactory;
 
-    public function items()
+    public function items(): BelongsToMany
     {
         return $this->belongsToMany(Item::class);
+    }
+
+    protected function casts(): array
+    {
+        return [];
     }
 }
