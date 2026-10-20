@@ -9,17 +9,17 @@ use Illuminate\Validation\Rule;
 class TagController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Afficher tous les tags.
      */
     public function index()
     {
-        $tags = Tag::all();
+        $tags = Tag::orderBy('name')->paginate(15);
 
         return view('tags.index', compact('tags'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Afficher le formulaire de création d'un tag.
      */
     public function create()
     {
@@ -27,31 +27,37 @@ class TagController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistrer un nouveau tag.
      */
     public function store(Request $request)
     {
+        // Vérifier les données envoyées par le formulaire.
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:50', 'unique:tags,name'],
+            'name' => ['required', 'string', 'max:255', 'unique:tags,name'],
         ]);
 
-        Tag::create($validated);
+        // Créer le tag en base de données.
+        $tag = Tag::create($validated);
 
+        // Rediriger vers la liste des tags.
         return redirect()
             ->route('tags.index')
-            ->with('success', 'Le tag a été créé avec succès.');
+            ->with('success', 'Tag créé avec succès.');
     }
 
     /**
-     * Display the specified resource.
+     * Afficher un tag et les objets qui lui sont associés.
      */
     public function show(Tag $tag)
     {
-        return view('tags.show', compact('tag'));
+        // Récupérer les objets associés au tag, par pages de 15.
+        $items = $tag->items()->paginate(15);
+
+        return view('tags.show', compact('tag', 'items'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Afficher le formulaire de modification d'un tag.
      */
     public function edit(Tag $tag)
     {
@@ -59,35 +65,39 @@ class TagController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Enregistrer les modifications d'un tag.
      */
     public function update(Request $request, Tag $tag)
     {
+        // Le nom doit être unique, sauf pour le tag modifié lui-même.
         $validated = $request->validate([
             'name' => [
                 'required',
                 'string',
-                'max:50',
+                'max:255',
                 Rule::unique('tags', 'name')->ignore($tag->id),
             ],
         ]);
 
+        // Mettre à jour le tag en base de données.
         $tag->update($validated);
 
         return redirect()
             ->route('tags.index')
-            ->with('success', 'Le tag a été modifié avec succès.');
+            ->with('success', 'Tag modifié avec succès.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer un tag.
      */
     public function destroy(Tag $tag)
     {
+        // Supprimer uniquement le tag.
+        // Les objets associés restent en base de données.
         $tag->delete();
 
         return redirect()
             ->route('tags.index')
-            ->with('success', 'Le tag a été supprimé avec succès.');
+            ->with('success', 'Tag supprimé avec succès.');
     }
 }
