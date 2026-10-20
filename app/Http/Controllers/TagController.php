@@ -12,12 +12,16 @@ class TagController extends Controller
     /**
      * Afficher tous les tags, 20 par page.
      */
-    public function index()
-    {
-        $tags = Tag::orderBy('name')->paginate(20);
 
-        return view('tags.index', compact('tags'));
-    }
+public function index()
+{
+    $tags = Tag::withCount('items')
+        ->orderBy('name')
+        ->paginate(16);
+
+    return view('tags.index', compact('tags'));
+}
+
 
     /**
      * Afficher le formulaire de création.

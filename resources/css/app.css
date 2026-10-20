@@ -56,7 +56,7 @@
     --radius-xl: 24px;
 
     --shadow-sm: 0 2px 8px rgb(31 55 78 / 5%);
-    --shadow-md: 0 4px 18px rgb(31 55 78 / 7%);
+    --shadow-md: 0 4px 18px rgb(31 55 78 / 9%);
     --shadow-lg: 0 12px 32px rgb(31 55 78 / 12%);
 }
 
@@ -81,8 +81,8 @@
     --warning: #fcd34d;
 
     --shadow-sm: 0 2px 8px rgb(0 0 0 / 12%);
-    --shadow-md: 0 4px 18px rgb(0 0 0 / 18%);
-    --shadow-lg: 0 12px 32px rgb(0 0 0 / 25%);
+    --shadow-md: 0 4px 18px rgb(0 0 0 / 22%);
+    --shadow-lg: 0 12px 32px rgb(0 0 0 / 30%);
 }
 
 /* ========================================
@@ -220,9 +220,9 @@ small,
 
 hr {
     height: 1px;
+    margin-block: 1.5rem;
     border: 0;
     background: var(--border);
-    margin-block: 1.5rem;
 }
 
 /* ========================================
@@ -293,9 +293,6 @@ main {
    6. Navigation existante
 ======================================== */
 
-/* Le layout principal utilise surtout des classes Tailwind.
-   Ces règles couvrent aussi une éventuelle navigation classique. */
-
 body > header {
     position: relative;
     z-index: 40;
@@ -339,60 +336,106 @@ summary::-webkit-details-marker {
 }
 
 /* ========================================
-   7. Cartes
+   7. Cartes et grilles responsive
 ======================================== */
 
+/* Style commun à toutes les cartes */
 .card,
 .item-card,
-.tag-card,
-.place-card {
+.place-card,
+.tag-card {
     min-width: 0;
-    margin-block: 1rem;
-    padding: 1.5rem;
-    overflow-wrap: anywhere;
+    padding: 1rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     background: var(--surface);
     color: var(--text);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
+
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease,
-        background-color 0.2s ease;
+        box-shadow 0.25s ease,
+        transform 0.25s ease,
+        border-color 0.25s ease;
 }
 
+/* Effet au survol */
 .card:hover,
 .item-card:hover,
-.tag-card:hover,
-.place-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
-    box-shadow: var(--shadow-lg);
+.place-card:hover,
+.tag-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
+/* Empêcher les textes longs de déborder */
+.card h2,
+.card h3,
 .item-card h2,
 .item-card h3,
+.place-card h2,
+.place-card h3,
 .tag-card h2,
-.place-card h2 {
-    margin-top: 0;
+.tag-card h3 {
+    overflow-wrap: anywhere;
 }
 
+/* Liens des titres de cartes */
 .item-card h2 a,
-.item-card h3 a,
-.tag-card h2 a,
-.place-card h2 a {
+.place-card h2 a,
+.tag-card h2 a {
     color: var(--primary-dark);
 }
 
+.item-card h2 a:hover,
+.place-card h2 a:hover,
+.tag-card h2 a:hover {
+    color: var(--accent);
+}
+
+/* Desktop : 4 colonnes */
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: stretch;
 }
 
 .card-grid > * {
     min-width: 0;
+    width: auto;
     margin: 0;
+}
+
+/* Tablette paysage : 4 colonnes */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .card-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* Tablette portrait : 3 colonnes */
+@media (min-width: 641px) and (max-width: 1024px) and (orientation: portrait) {
+    .card-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.85rem;
+    }
+}
+
+/* Téléphone : 2 colonnes */
+@media (max-width: 640px) {
+    .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+    }
+
+    .card,
+    .item-card,
+    .place-card,
+    .tag-card {
+        padding: 0.85rem;
+        border-radius: var(--radius-md);
+    }
 }
 
 /* ========================================
@@ -807,17 +850,27 @@ tbody tr:hover {
    15. Pagination Laravel
 ======================================== */
 
-.pagination,
-nav[role="navigation"] {
+.pagination {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 0.35rem;
+    gap: 0.4rem;
+    width: 100%;
     margin-top: 1.75rem;
 }
 
-nav[role="navigation"] {
+nav[role="navigation"]:has(a[rel="next"]),
+nav[role="navigation"]:has(a[rel="prev"]),
+nav[role="navigation"]:has([aria-label*="Pagination"]),
+nav[role="navigation"]:has([aria-label*="pagination"]) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    margin-top: 1.75rem;
     padding: 0.75rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
@@ -827,21 +880,44 @@ nav[role="navigation"] {
 
 nav[role="navigation"] a,
 nav[role="navigation"] span {
-    max-width: 100%;
+    display: inline-flex;
+    min-width: 40px;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--border);
     border-radius: 8px;
-}
-
-nav[role="navigation"] a {
-    color: var(--primary);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
 }
 
 nav[role="navigation"] a:hover {
+    border-color: var(--accent);
     background: var(--accent-light);
+    color: var(--primary-dark);
 }
 
+nav[role="navigation"] span[aria-current="page"],
 nav[role="navigation"] span[aria-current="page"] span {
+    border-color: var(--primary);
     background: var(--primary);
-    color: white;
+    color: #ffffff;
+}
+
+nav[role="navigation"] span[aria-disabled="true"],
+nav[role="navigation"] span[aria-disabled="true"] span {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+nav[role="navigation"] svg {
+    width: 1rem;
+    height: 1rem;
 }
 
 /* ========================================
@@ -939,6 +1015,12 @@ footer {
     color: var(--primary-dark);
 }
 
+.dark .item-card h2 a,
+.dark .place-card h2 a,
+.dark .tag-card h2 a {
+    color: var(--primary-dark);
+}
+
 .dark .btn:not(.btn-primary):not(.btn-danger):not(.btn-success) {
     border-color: var(--border);
     background: var(--surface-secondary);
@@ -992,9 +1074,7 @@ footer {
         padding: 2rem 1.5rem;
     }
 
-    .card-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    /* Les colonnes des cartes sont gérées en section 7. */
 
     .stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1041,15 +1121,11 @@ footer {
         max-width: 100%;
     }
 
-    .card-grid,
+    /* Seules les statistiques passent à une colonne. */
     .stats-grid {
         grid-template-columns: minmax(0, 1fr);
     }
 
-    .item-card,
-    .tag-card,
-    .place-card,
-    .card,
     .stat-card {
         padding: 1rem;
         border-radius: var(--radius-md);
@@ -1120,6 +1196,22 @@ footer {
         gap: 0.2rem;
         padding: 0.4rem;
     }
+
+    nav[role="navigation"]:has(a[rel="next"]),
+    nav[role="navigation"]:has(a[rel="prev"]),
+    nav[role="navigation"]:has([aria-label*="Pagination"]),
+    nav[role="navigation"]:has([aria-label*="pagination"]) {
+        gap: 0.25rem;
+        padding: 0.5rem 0.25rem;
+    }
+
+    nav[role="navigation"] a,
+    nav[role="navigation"] span {
+        min-width: 34px;
+        min-height: 36px;
+        padding: 0.35rem 0.5rem;
+        font-size: 0.8rem;
+    }
 }
 
 /* ========================================
@@ -1157,4 +1249,67 @@ footer {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+
+    .card:hover,
+    .item-card:hover,
+    .place-card:hover,
+    .tag-card:hover {
+        transform: none;
+    }
+}
+
+/* ========================================
+   23. Espacement des tags et des actions
+======================================== */
+
+/* Tags : laisser de l'espace sous le groupe */
+.item-card .tags,
+.item-card .tag-list,
+.item-card .badges,
+.item-card .tag-badges,
+.item-card .tags-container,
+.item-show .tags,
+.item-show .tag-list,
+.item-show .badges,
+.item-show .tag-badges,
+.item-show .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Zone contenant les boutons d'action */
+.item-card .card-actions,
+.item-card .item-actions,
+.item-card .actions,
+.item-show .card-actions,
+.item-show .item-actions,
+.item-show .actions,
+.item-show .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: 1.25rem;
+}
+
+/* Formulaires de suppression : éviter les marges imprévues */
+.item-card .card-actions form,
+.item-card .item-actions form,
+.item-card .actions form,
+.item-show .card-actions form,
+.item-show .item-actions form,
+.item-show .actions form,
+.item-show .button-group form {
+    margin: 0;
+}
+
+/* Éviter que les tags touchent les actions suivantes */
+.item-card .tag,
+.item-card .badge,
+.item-show .tag,
+.item-show .badge {
+    margin: 0;
 }

@@ -8,15 +8,19 @@ return new class extends Migration
 {
 public function up(): void
 {
-    Schema::table('tags', function (Blueprint $table) {
-        $table->string('color', 7)->default('#0D9488');
-    });
+    if (! Schema::hasColumn('tags', 'color')) {
+            Schema::table('tags', function (Blueprint $table) {
+                $table->string('color')->default('#0D9488');
+            });
+    }
 }
 
 public function down(): void
 {
-    Schema::table('tags', function (Blueprint $table) {
-        $table->dropColumn('color');
-    });
-}
+    if (Schema::hasColumn('tags', 'color')) {
+            Schema::table('tags', function (Blueprint $table) {
+                $table->dropColumn('color');
+            });
+}}
 };
+#0D9488

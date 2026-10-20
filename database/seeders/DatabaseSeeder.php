@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Les quatre lieux
+        // 1. Les quatre lieux associés aux objets de démonstration
         $hall = Place::create([
             'name' => 'Hall des guichets',
             'kind' => PlaceKind::Hall->value,
@@ -34,7 +34,24 @@ class DatabaseSeeder extends Seeder
             'kind' => PlaceKind::Train->value,
         ]);
 
-        // 2. Les huit tags
+        // 2. Les sept lieux vides
+        // Ils existent en base de données, mais n'ont aucun objet associé.
+        foreach ([
+            PlaceKind::TicketOffice,
+            PlaceKind::WaitingRoom,
+            PlaceKind::StationEntrance,
+            PlaceKind::Underpass,
+            PlaceKind::Parking,
+            PlaceKind::BicycleParking,
+            PlaceKind::Toilets,
+        ] as $kind) {
+            Place::create([
+                'name' => $kind->label(),
+                'kind' => $kind->value,
+            ]);
+        }
+
+        // 3. Les huit tags
         $tags = [];
 
         foreach ([
@@ -52,7 +69,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 3. Les quinze objets
+        // 4. Les quinze objets
         $items = [
             [
                 'place' => $hall,

@@ -51,26 +51,31 @@
                 @enderror
             </div>
 
+
             <div>
                 <x-label for="place_id">Lieu de découverte *</x-label>
+
                 <x-select name="place_id" id="place_id" required>
                     <option value="">Choisir un lieu</option>
+
                     @foreach ($places as $place)
-                        <option value="{{ $place->id }}" @selected(old('place_id') == $place->id)>
+                        <option value="{{ $place->id }}" @selected((string) old('place_id', $item->place_id ?? '') === (string) $place->id)>
                             {{ $place->name }}
                         </option>
                     @endforeach
                 </x-select>
+
                 @error('place_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
 
                 @if ($places->isEmpty())
                     <p class="mt-2 text-sm text-amber-700 dark:text-amber-300">
-                        Aucun lieu n’est enregistré. Ajoute d’abord un lieu.
+                        Aucun lieu prédéfini n’est disponible. Contacte l’administrateur.
                     </p>
                 @endif
             </div>
+
 
             <div>
                 <x-label for="color">Couleur de l’objet *</x-label>

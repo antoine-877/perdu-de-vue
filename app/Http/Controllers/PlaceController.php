@@ -9,13 +9,14 @@ class PlaceController extends Controller
     /**
      * Afficher tous les lieux.
      */
-    public function index()
-    {
-        $places = Place::orderBy('name')->paginate(15);
+public function index()
+{
+    $places = Place::withCount('items')
+        ->orderBy('name')
+        ->paginate(16);
 
-        return view('places.index', compact('places'));
-    }
-
+    return view('places.index', compact('places'));
+}
 
     /**
      * Afficher un lieu et les objets qui lui sont associés.

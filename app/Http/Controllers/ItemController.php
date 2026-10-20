@@ -17,7 +17,7 @@ class ItemController extends Controller
     {
         $items = Item::with(['place', 'tags'])
             ->latest()
-            ->paginate(15);
+            ->paginate(16);
 
         return view('items.index', compact('items'));
     }

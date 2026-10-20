@@ -29,10 +29,3 @@ return new class extends Migration
         Schema::dropIfExists('places');
     }
 };
-
-// dans le modele place : protected function casts(): array
-// {
-//     return [
-//         'kind' => \App\Enums\PlaceKind::class,
-//     ];
-// }

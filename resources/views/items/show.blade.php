@@ -77,23 +77,26 @@
             @endif
         </section>
 
+
         <section class="item-tags">
             <h2>Tags</h2>
 
-            @forelse ($item->tags as $tag)
-                <a href="{{ route('tags.show', $tag) }}" class="tag">
-                    {{ $tag->name }}
-                </a>
-            @empty
-                <p>Aucun tag associé à cet objet.</p>
-            @endforelse
+            <div class="grid grid-cols-4 gap-3">
+                @forelse ($item->tags as $tag)
+                    <a href="{{ route('tags.show', $tag) }}" class="inline-block no-underline">
+                        <x-tag-badge :tag="$tag" />
+                    </a>
+                @empty
+                    <p class="col-span-4">Aucun tag associé à cet objet.</p>
+                @endforelse
+            </div>
         </section>
 
-        @if (! $item->isReturned())
-            <form
-                action="{{ route('items.return', $item) }}"
-                method="POST"
-            >
+
+
+        @if (!$item->isReturned())
+            <form action="{{ route('items.return', $item) }}" method="POST"
+                onsubmit="return confirm('Es-tu sûr de vouloir marquer cet objet comme restitué ? Cette action ne pourra pas être annulée.');">
                 @csrf
                 @method('PATCH')
 
@@ -103,11 +106,9 @@
             </form>
         @endif
 
-        <form
-            action="{{ route('items.destroy', $item) }}"
-            method="POST"
-            onsubmit="return confirm('Voulez-vous vraiment supprimer cet objet ?');"
-        >
+
+        <form action="{{ route('items.destroy', $item) }}" class="mt-6" method="POST"
+            onsubmit="return confirm('Voulez-vous vraiment supprimer cet objet ?');">
             @csrf
             @method('DELETE')
 
