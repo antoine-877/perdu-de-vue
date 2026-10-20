@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Color;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -9,17 +10,17 @@ use Illuminate\Validation\Rule;
 class TagController extends Controller
 {
     /**
-     * Afficher tous les tags.
+     * Afficher tous les tags, 20 par page.
      */
     public function index()
     {
-        $tags = Tag::orderBy('name')->paginate(15);
+        $tags = Tag::orderBy('name')->paginate(20);
 
         return view('tags.index', compact('tags'));
     }
 
     /**
-     * Afficher le formulaire de création d'un tag.
+     * Afficher le formulaire de création.
      */
     public function create()
     {
@@ -31,33 +32,30 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        // Vérifier les données envoyées par le formulaire.
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:tags,name'],
+            'color' => ['required', Rule::enum(Color::class)],
         ]);
 
-        // Créer le tag en base de données.
-        $tag = Tag::create($validated);
+        Tag::create($validated);
 
-        // Rediriger vers la liste des tags.
         return redirect()
             ->route('tags.index')
             ->with('success', 'Tag créé avec succès.');
     }
 
     /**
-     * Afficher un tag et les objets qui lui sont associés.
+     * Afficher un tag et ses objets.
      */
     public function show(Tag $tag)
     {
-        // Récupérer les objets associés au tag, par pages de 15.
         $items = $tag->items()->paginate(15);
 
         return view('tags.show', compact('tag', 'items'));
     }
 
     /**
-     * Afficher le formulaire de modification d'un tag.
+     * Afficher le formulaire de modification.
      */
     public function edit(Tag $tag)
     {
@@ -65,11 +63,10 @@ class TagController extends Controller
     }
 
     /**
-     * Enregistrer les modifications d'un tag.
+     * Enregistrer les modifications.
      */
     public function update(Request $request, Tag $tag)
     {
-        // Le nom doit être unique, sauf pour le tag modifié lui-même.
         $validated = $request->validate([
             'name' => [
                 'required',
@@ -77,9 +74,9 @@ class TagController extends Controller
                 'max:255',
                 Rule::unique('tags', 'name')->ignore($tag->id),
             ],
+            'color' => ['required', Rule::enum(Color::class)],
         ]);
 
-        // Mettre à jour le tag en base de données.
         $tag->update($validated);
 
         return redirect()
@@ -92,8 +89,6 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        // Supprimer uniquement le tag.
-        // Les objets associés restent en base de données.
         $tag->delete();
 
         return redirect()

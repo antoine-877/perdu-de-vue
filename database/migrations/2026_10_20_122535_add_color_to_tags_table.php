@@ -6,23 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::table('tags', function (Blueprint $table) {
-    $table->string('color', 7)->default('#0D9488');
-});
-    }
+public function up(): void
+{
+    Schema::table('tags', function (Blueprint $table) {
+        $table->string('color', 7)->default('#0D9488');
+    });
+}
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('tags', function (Blueprint $table) {
-    $table->dropColumn('color');
-});
-    }
+public function down(): void
+{
+    Schema::table('tags', function (Blueprint $table) {
+        $table->dropColumn('color');
+    });
+}
 };
