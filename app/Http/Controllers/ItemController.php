@@ -126,19 +126,25 @@ class ItemController extends Controller
             ->with('success', 'Objet modifié avec succès.');
     }
 
-    /**
-     * Marquer un objet comme restitué.
-     */
-    public function return(Item $item)
-    {
-        $item->update([
-            'returned_at' => now()->toDateString(),
-        ]);
-
+/**
+ * Marquer un objet comme restitué.
+ */
+public function return(Item $item)
+{
+    if ($item->isReturned()) {
         return redirect()
             ->route('items.show', $item)
-            ->with('success', 'Objet marqué comme restitué.');
+            ->with('success', "Cet objet a déjà été restitué le {$item->returned_at->format('d/m/Y')}.");
     }
+
+    $item->update([
+        'returned_at' => now()->toDateString(),
+    ]);
+
+    return redirect()
+        ->route('items.show', $item)
+        ->with('success', "{$item->name} a été restitué.");
+}
 
     /**
      * Supprimer un objet.
