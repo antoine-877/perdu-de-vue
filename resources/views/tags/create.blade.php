@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Créer un tag')
+@section('title', __('site.create_tag'))
 
 @section('content')
     <div class="container mx-auto max-w-2xl px-4 py-8">
         <h1 class="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
-            Créer un tag
+            {{ __('site.create_tag') }}
         </h1>
 
         @if ($errors->any())
             <div class="mb-4 rounded-lg bg-red-100 p-4 text-red-800">
-                <p class="font-semibold">Veuillez corriger les erreurs suivantes :</p>
+                <p class="font-semibold">{{ __('site.fix_errors') }}</p>
                 <ul class="mt-2 list-inside list-disc">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -23,7 +23,7 @@
             @csrf
 
             <div>
-                <x-label for="name">Nom du tag</x-label>
+                <x-label for="name">{{ __('site.tag_name') }}</x-label>
 
                 <x-input name="name" id="name" :value="old('name')" required maxlength="255" autofocus />
 
@@ -38,11 +38,11 @@
 
             <div class="flex flex-wrap gap-3">
                 <button type="submit" class="btn btn-primary">
-                    Créer le tag
+                    {{ __('site.create_tag_button') }}
                 </button>
 
                 <a href="{{ route('tags.index') }}" class="btn">
-                    Annuler
+                    {{ __('site.cancel') }}
                 </a>
             </div>
         </form>

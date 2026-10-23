@@ -1,14 +1,14 @@
  @extends('layouts.app')
 
- @section('title', 'Liste des tags')
+ @section('title', __('site.tags_title'))
 
  @section('content')
      <div class="container">
          <header class="page-header">
-             <h1>Liste des tags</h1>
+             <h1>{{ __('site.tags_title') }}</h1>
 
              <a href="{{ route('tags.create') }}" class="btn btn-primary">
-                 Créer un tag
+                 {{ __('site.create_tag') }}
              </a>
          </header>
 
@@ -28,32 +28,32 @@
                      </h2>
 
                      <p>
-                         <strong>Nombre d'objets associés :</strong>
+                         <strong>{{ __('site.associated_items_count') }}</strong>
                          {{ $tag->items_count ?? $tag->items->count() }}
                      </p>
 
                      <div class="tag-actions">
                          <a href="{{ route('tags.show', $tag) }}" class="btn">
-                             Voir
+                             {{ __('site.view') }}
                          </a>
 
                          <a href="{{ route('tags.edit', $tag) }}" class="btn btn-primary">
-                             Modifier
+                             {{ __('site.edit') }}
                          </a>
 
                          <form action="{{ route('tags.destroy', $tag) }}" method="POST"
-                             onsubmit="return confirm('Voulez-vous vraiment supprimer ce tag ?');">
+                             onsubmit="return confirm(@json(__('site.delete_tag_confirm')));">
                              @csrf
                              @method('DELETE')
 
                              <button type="submit" class="btn btn-danger">
-                                 Supprimer
+                                 {{ __('site.delete') }}
                              </button>
                          </form>
                      </div>
                  </article>
              @empty
-                 <p>Aucun tag enregistré pour le moment.</p>
+                 <p>{{ __('site.no_tags_yet') }}</p>
              @endforelse
          </div>
 

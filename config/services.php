@@ -2,6 +2,8 @@
 
 return [
 
+    'agent_action_token' => env('AGENT_ACTION_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

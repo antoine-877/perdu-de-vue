@@ -26,7 +26,7 @@
 
 <fieldset>
     <legend class="mb-3 text-sm font-medium text-gray-700 dark:text-gray-200">
-        Couleur *
+        {{ __('site.color_required') }}
     </legend>
 
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -40,7 +40,7 @@
                     peer-checked:border-blue-600 peer-checked:ring-2 peer-checked:ring-blue-500
                     dark:border-gray-600 dark:text-gray-100">
                     <span class="h-5 w-5 shrink-0 rounded-full {{ $colorClasses[$color->value] }}"></span>
-                    <span class="text-sm">{{ $color->label() }}</span>
+                    <span class="text-sm">{{ __('site.color_' . $color->value) }}</span>
                 </span>
             </label>
         @endforeach

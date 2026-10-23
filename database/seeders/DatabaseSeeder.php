@@ -55,18 +55,19 @@ class DatabaseSeeder extends Seeder
         $tags = [];
 
         foreach ([
-            'Électronique',
-            'Vêtement',
-            'Accessoire',
-            'Jouet',
-            'Document',
-            'Sport',
-            'Nourriture',
-            'Insolite',
-        ] as $name) {
-            $tags[$name] = Tag::create([
-                'name' => $name,
-            ]);
+            'Électronique' => Color::Blue,
+            'Vêtement' => Color::Green,
+            'Accessoire' => Color::Orange,
+            'Jouet' => Color::Purple,
+            'Document' => Color::White,
+            'Sport' => Color::Red,
+            'Nourriture' => Color::Yellow,
+            'Insolite' => Color::Multicolor,
+        ] as $name => $color) {
+            $tags[$name] = Tag::updateOrCreate(
+                ['name' => $name],
+                ['color' => $color->value],
+            );
         }
 
         // 4. Les quinze objets

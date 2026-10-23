@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Détails du tag')
+@section('title', __('site.tag_title'))
 
 @section('content')
     <div class="container">
         <header class="page-header">
-            <h1>Tag : {{ $tag->name }}</h1>
+            <h1>{{ __('site.tag_heading', ['name' => $tag->name]) }}</h1>
 
             <div class="tag-actions">
                 <a href="{{ route('tags.index') }}" class="btn">
-                    Retour aux tags
+                    {{ __('site.back_to_tags') }}
                 </a>
 
                 <a href="{{ route('tags.edit', $tag) }}" class="btn btn-primary">
-                    Modifier le tag
+                    {{ __('site.edit_tag') }}
                 </a>
             </div>
         </header>
@@ -25,19 +25,24 @@
         @endif
 
         <section>
-            <h2>Objets associés</h2>
+            <h2>{{ __('site.associated_items') }}</h2>
 
             @if ($items->isEmpty())
-                <p>Aucun objet n'est associé à ce tag pour le moment.</p>
+                <p>{{ __('site.no_tag_items') }}</p>
             @else
                 <p>
                     {{ $items->total() }}
-                    objet(s) associé(s) à ce tag.
+                    {{ __('site.tag_items_count') }}
                 </p>
 
                 <div class="items-list">
                     @foreach ($items as $item)
                         <article class="item-card">
+                            @if ($item->photo_path)
+                                <img src="{{ Storage::disk('public')->url($item->photo_path) }}"
+                                    alt="{{ __('site.photo_of', ['name' => $item->name]) }}"
+                                    class="mb-4 aspect-[4/3] w-full rounded-lg object-cover">
+                            @endif
                             <h3>
                                 <a href="{{ route('items.show', $item) }}">
                                     {{ $item->name }}
@@ -50,31 +55,31 @@
 
                             @if ($item->place)
                                 <p>
-                                    <strong>Lieu :</strong>
+                                    <strong>{{ __('site.location_label') }}</strong>
                                     <a href="{{ route('places.show', $item->place) }}">
-                                        {{ $item->place->name }}
+                                        {{ app('translator')->has('site.seeded_places.' . $item->place->name) ? __('site.seeded_places.' . $item->place->name) : $item->place->name }}
                                     </a>
                                 </p>
                             @endif
 
                             @if ($item->found_on)
                                 <p>
-                                    <strong>Date de découverte :</strong>
-                                    {{ $item->found_on->format('d/m/Y') }}
+                                    <strong>{{ __('site.found_date_label') }}</strong>
+                                    {{ $item->found_on->locale(app()->getLocale())->isoFormat('D MMMM YYYY') }}
                                 </p>
                             @endif
 
                             <p>
-                                <strong>Statut :</strong>
+                                <strong>{{ __('site.status_label') }}</strong>
                                 @if ($item->isReturned())
-                                    Restitué
+                                    {{ __('site.returned') }}
                                 @else
-                                    En attente de restitution
+                                    {{ __('site.not_returned') }}
                                 @endif
                             </p>
 
                             <a href="{{ route('items.show', $item) }}" class="btn">
-                                Voir l'objet
+                                {{ __('site.view_item') }}
                             </a>
                         </article>
                     @endforeach

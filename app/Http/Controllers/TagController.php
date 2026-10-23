@@ -12,16 +12,14 @@ class TagController extends Controller
     /**
      * Afficher tous les tags, 20 par page.
      */
+    public function index()
+    {
+        $tags = Tag::withCount('items')
+            ->orderBy('name')
+            ->paginate(16);
 
-public function index()
-{
-    $tags = Tag::withCount('items')
-        ->orderBy('name')
-        ->paginate(16);
-
-    return view('tags.index', compact('tags'));
-}
-
+        return view('tags.index', compact('tags'));
+    }
 
     /**
      * Afficher le formulaire de création.
@@ -45,7 +43,7 @@ public function index()
 
         return redirect()
             ->route('tags.index')
-            ->with('success', 'Tag créé avec succès.');
+            ->with('success', __('site.tag_created'));
     }
 
     /**
@@ -85,7 +83,7 @@ public function index()
 
         return redirect()
             ->route('tags.index')
-            ->with('success', 'Tag modifié avec succès.');
+            ->with('success', __('site.tag_updated'));
     }
 
     /**
@@ -97,6 +95,6 @@ public function index()
 
         return redirect()
             ->route('tags.index')
-            ->with('success', 'Tag supprimé avec succès.');
+            ->with('success', __('site.tag_deleted'));
     }
 }

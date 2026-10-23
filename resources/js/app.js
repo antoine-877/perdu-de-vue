@@ -6,11 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const updateThemeIcon = () => {
         const isDark = document.documentElement.classList.contains("dark");
+        const isFrench = document.documentElement.lang.startsWith("fr");
 
         icon.textContent = isDark ? "☀️" : "🌙";
         toggle.setAttribute(
             "aria-label",
-            isDark ? "Activer le mode clair" : "Activer le mode sombre",
+            isDark
+                ? isFrench
+                    ? "Activer le mode clair"
+                    : "Enable light mode"
+                : isFrench
+                  ? "Activer le mode sombre"
+                  : "Enable dark mode",
         );
     };
 

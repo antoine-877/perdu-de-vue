@@ -1,10 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\TagController;
-
+use App\Http\Middleware\EnsureAgentToken;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +23,7 @@ Route::any('/', function () {
     return redirect('/objets');
 });
 
+Route::post('/langue', [LocaleController::class, 'update'])->name('locale.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +34,19 @@ Route::any('/', function () {
 // Afficher la liste de tous les objets
 Route::get('/objets', [ItemController::class, 'index'])
     ->name('items.index');
+
+Route::get('/perdu', [ClaimController::class, 'create'])->name('claims.create');
+Route::post('/perdu', [ClaimController::class, 'store'])->name('claims.store');
+Route::post('/declarations/{claim}/associer', [ClaimController::class, 'link'])
+    ->middleware(EnsureAgentToken::class)
+    ->name('claims.link');
+Route::get('/statistiques', [StatisticsController::class, 'index'])->name('statistics.index');
+Route::post('/objets/{item}/photos', [PhotoController::class, 'store'])
+    ->middleware(EnsureAgentToken::class)->name('photos.store');
+Route::patch('/objets/{item}/photos/{photo}/couverture', [PhotoController::class, 'cover'])
+    ->middleware(EnsureAgentToken::class)->name('photos.cover');
+Route::delete('/objets/{item}/photos/{photo}', [PhotoController::class, 'destroy'])
+    ->middleware(EnsureAgentToken::class)->name('photos.destroy');
 
 // Afficher le formulaire de création d'un objet
 Route::get('/objets/nouveau', [ItemController::class, 'create'])
@@ -58,7 +76,6 @@ Route::patch('/objets/{item}/restitution', [ItemController::class, 'return'])
 Route::delete('/objets/{item}', [ItemController::class, 'destroy'])
     ->name('items.destroy');
 
-
 /*
 |--------------------------------------------------------------------------
 | Lieux (Places)
@@ -72,6 +89,9 @@ Route::get('/lieux', [PlaceController::class, 'index'])
 // Afficher un lieu et les objets associés
 Route::get('/lieux/{place}', [PlaceController::class, 'show'])
     ->name('places.show');
+Route::post('/lieux/{place}/photo', [PlaceController::class, 'updatePhoto'])
+    ->middleware(EnsureAgentToken::class)
+    ->name('places.photo.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -106,7 +126,6 @@ Route::put('/tags/{tag}', [TagController::class, 'update'])
 // Supprimer un tag
 Route::delete('/tags/{tag}', [TagController::class, 'destroy'])
     ->name('tags.destroy');
-
 
 /*
 |--------------------------------------------------------------------------

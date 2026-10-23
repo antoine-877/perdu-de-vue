@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable([
     'name',
     'kind',
+    'photo_path',
 ])]
 class Place extends Model
 {
