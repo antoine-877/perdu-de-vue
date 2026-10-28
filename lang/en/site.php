@@ -134,6 +134,7 @@ return [
     'no_tag_items' => 'No items are associated with this tag yet.',
     'tag_items_count' => 'item(s) associated with this tag.',
     'view_item' => 'View item',
+    'view_details' => 'View details',
     'places_details' => 'Location details',
     'items_found_count' => 'Items found:',
     'items_at_place' => 'Items found at this location',

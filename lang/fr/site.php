@@ -134,6 +134,7 @@ return [
     'no_tag_items' => 'Aucun objet n’est associé à ce tag pour le moment.',
     'tag_items_count' => 'objet(s) associé(s) à ce tag.',
     'view_item' => 'Voir l’objet',
+    'view_details' => 'Voir les détails',
     'places_details' => 'Informations sur le lieu',
     'items_found_count' => 'Nombre d’objets trouvés :',
     'items_at_place' => 'Objets trouvés dans ce lieu',
